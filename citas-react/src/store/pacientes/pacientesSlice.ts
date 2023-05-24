@@ -6,13 +6,14 @@ import { RootState } from '../store';
 interface pacientesState {
     value: {
         pacientes: Paciente[],
-        selected?: Paciente
+        selected: Paciente | null
     }
 };
 
 const initialState: pacientesState = {
     value: {
-        pacientes: []
+        pacientes: [],
+        selected: null
     }
 }
 
@@ -31,7 +32,7 @@ export const pacientesSlice = createSlice({
         },
         editPaciente: (state, action) => {
             state.value.pacientes = state.value.pacientes.map(paciente => {
-                state.value.selected = undefined;
+                state.value.selected = null;
                 if(paciente.id === action.payload.id) {
                     return action.payload;
                 }
@@ -39,9 +40,9 @@ export const pacientesSlice = createSlice({
             });
         },
         deletePaciente: (state, action) => {
-            state.value.selected = undefined;
+            state.value.selected = null;
             state.value.pacientes = state.value.pacientes.filter(paciente => {
-                return paciente.id === action.payload.id;
+                return paciente.id !== action.payload;
             });
         }
     }

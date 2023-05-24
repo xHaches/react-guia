@@ -10,6 +10,14 @@ import { addNewPaciente, editPaciente } from "../store/pacientes/pacientesSlice"
 import { RootState } from "../store/store";
 import { useEffect } from "react";
 
+const defaultValues = {
+  nombre: 'Perrhijo',
+  propietario: 'Luis',
+  email: 'email@email.com',
+  fechaAlta: new Date().toISOString().split('T')[0],
+  sintomas: ''
+};
+
 const Formulario = () => {
 
   const dispatch = useDispatch();
@@ -17,24 +25,12 @@ const Formulario = () => {
   const { selected } = useSelector((state: RootState) => state.pacientes.value);
 
   const {handleSubmit, formState: {errors}, control, reset, setValue} = useForm({
-    defaultValues: {
-      nombre: 'Perrhijo',
-      propietario: 'Luis',
-      email: 'email@email.com',
-      fechaAlta: new Date().toISOString().split('T')[0],
-      sintomas: ''
-    },
+    defaultValues,
   });
 
   useEffect(() => {
     if(!selected) {
-      reset({
-        nombre: '',
-        propietario: '',
-        email: '',
-        fechaAlta: '',
-        sintomas: ''
-      })
+      reset(defaultValues)
       return;
     }
     setValue('nombre', selected.nombre);

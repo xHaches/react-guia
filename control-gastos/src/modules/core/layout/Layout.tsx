@@ -1,8 +1,9 @@
+import Gastos from "../../gastos/Gastos"
 
 const Layout = () => {
   return (
     <>
-        <h1>hola</h1>
+      <Gastos/>
     </>
   )
 }

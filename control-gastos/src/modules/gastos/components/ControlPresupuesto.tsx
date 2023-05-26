@@ -22,6 +22,12 @@ const ControlPresupuesto = () => {
                 <p>
                     <span>Presupuesto: </span> {presupuestoCurr}
                 </p>
+                <p>
+                    <span>Disponible: </span> {"0.00"}
+                </p>
+                <p>
+                    <span>Gastado: </span> {"0.00"}
+                </p>
             </div>
         </div>
     )

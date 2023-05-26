@@ -1,5 +1,5 @@
 
-const Mensaje = ({children, tipo}: {children: string, tipo: string}) => {
+export const Mensaje = ({children, tipo}: {children: string, tipo: string}) => {
   return (
     <div className={`alerta ${tipo}`}>
         {children}

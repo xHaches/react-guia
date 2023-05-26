@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form'
-import Mensaje from './Mensaje';
+import { Mensaje } from './Mensaje';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setPresupuesto, setPresupuestoValido } from '../../shared/store/gastos/gastosSlice';

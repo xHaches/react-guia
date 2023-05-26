@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Gasto } from '../../../../interfaces/gasto.interface';
 import { RootState } from '../store';
 
 
@@ -6,7 +7,8 @@ interface gastosState {
     value: {
         presupuesto: number,
         presupuestoValido: boolean,
-        modalOpen: boolean
+        modalOpen: boolean,
+        gastos: Gasto[]
     }
 }
 
@@ -14,7 +16,8 @@ const initialState: gastosState = {
     value: {
         presupuesto: 0,
         presupuestoValido: false,
-        modalOpen: false
+        modalOpen: false,
+        gastos: []
     }
 }
 
@@ -30,6 +33,9 @@ export const gastosSlice = createSlice({
         },
         setModalOpen: (state, action) => {
             state.value.modalOpen = action.payload;
+        },
+        addGasto: (state, action) => {
+            state.value.gastos.push(action.payload);
         }
     }
 })
@@ -37,6 +43,7 @@ export const gastosSlice = createSlice({
 export const {
     setPresupuesto,
     setPresupuestoValido,
-    setModalOpen
+    setModalOpen,
+    addGasto
 } = gastosSlice.actions;
 export const selectGastos = (state: RootState) => state.gastos;

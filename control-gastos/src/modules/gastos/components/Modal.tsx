@@ -2,7 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import CerrarBtn from '/img/cerrar.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { addGasto, setModalOpen } from '../../shared/store/gastos/gastosSlice';
+import { addGasto, setModalOpen, updateGasto } from '../../shared/store/gastos/gastosSlice';
 import { RootState } from '../../shared/store/store';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,16 +13,23 @@ export const Modal = () => {
 
   const navigate = useNavigate();
 
-  const { modalOpen } = useSelector((state: RootState) => state.gastos.value);
+  const { modalOpen, gastoSeleccionadoEditar } = useSelector((state: RootState) => state.gastos.value);
   const dispatch = useDispatch();
 
   const {handleSubmit, formState: {errors}, reset, register, watch} = useForm({
     defaultValues: {
-        nombre: '',
-        cantidad: 0,
-        categoria: ''
+        nombre: gastoSeleccionadoEditar?.nombre ?? '',
+        cantidad: gastoSeleccionadoEditar?.cantidad ?? 0,
+        categoria: gastoSeleccionadoEditar?.categoria ?? ''
     }
   });
+
+  useEffect(() => {
+    if(!gastoSeleccionadoEditar) {
+      return
+    }
+  }, [gastoSeleccionadoEditar])
+  
 
   const [animarModal, setAnimarModal] = useState(false);
 
@@ -41,7 +48,24 @@ export const Modal = () => {
   }, [modalOpen])
 
   const onsubmit = (data: any) => {
-    dispatch(addGasto({...data, id: generarId(), fecha: Date.now()}));
+    if(gastoSeleccionadoEditar) {
+      dispatch(updateGasto({
+        ...data, 
+        id: gastoSeleccionadoEditar.id,
+        cantidad: Number(data.cantidad),
+        fecha: Date.now()
+      }));
+      closeModal();
+      return;
+    }
+    
+    dispatch(addGasto({
+        ...data, 
+        id: generarId(),
+        cantidad: Number(data.cantidad),
+        fecha: Date.now()
+      }
+    ));
     closeModal();
   }
   
@@ -53,7 +77,7 @@ export const Modal = () => {
       </div>
 
       <form className={`formulario ${animarModal ? 'animar' : 'cerrar'}`} onSubmit={handleSubmit(onsubmit)}>
-        <legend>Nuevo Gasto</legend>
+        <legend>{gastoSeleccionadoEditar ? 'Editar Gasto' : 'Nuevo Gasto'}</legend>
         <div className="campo">
             <label htmlFor="nombre">Nombre Gasto</label>
             <input
@@ -100,7 +124,7 @@ export const Modal = () => {
         </div>
 
         <Button type="submit" fullWidth variant="contained" sx={{marginTop: '10px'}}>
-          Añadir Gasto
+          {gastoSeleccionadoEditar ? 'Guardar Cambios' : 'Añadir Gasto'}
         </Button>
 
       </form>

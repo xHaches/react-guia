@@ -12,3 +12,10 @@ export const formatearFecha = (fechaMs: number) => {
     }
     return new Date(fechaMs).toLocaleDateString('es-ES', opt);
 }
+
+export const formatearAMoneda = (cantidad: number) => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(cantidad);
+}

@@ -1,5 +1,11 @@
+import { Button, Grid } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { formatearFecha } from "../../../helpers"
 import { Gasto as IGasto } from "../../../interfaces/gasto.interface"
+import { eliminarGasto, selectEditarGasto, setModalOpen } from "../../shared/store/gastos/gastosSlice";
+import { RootState } from "../../shared/store/store";
+import { routes } from "../routes/routes";
 
 import IconoAhorro from '/img/icono_ahorro.svg';
 import IconoCasa from '/img/icono_casa.svg';
@@ -20,6 +26,22 @@ const diccionarioIconos: any = {
 }
 
 export const Gasto = ({cantidad, categoria, id, nombre, fecha}: IGasto) => {
+
+  const { gastoSeleccionadoEditar } = useSelector((state: RootState) => state.gastos.value);
+
+  const dispatch = useDispatch();
+
+  const navigator = useNavigate();
+
+  const selectGastoEditar = () => {
+    dispatch(selectEditarGasto({cantidad, categoria, id, nombre, fecha}));
+    dispatch(setModalOpen(true));
+    navigator(routes[2].to)
+  }
+
+  const borrarGasto = () => {
+    dispatch(eliminarGasto(id));
+  }
   
   return (
     <div className="gasto sombra">
@@ -35,7 +57,12 @@ export const Gasto = ({cantidad, categoria, id, nombre, fecha}: IGasto) => {
         </div>
       </div>
       <p className="cantidad-gasto">${cantidad}</p>
+      <Grid container flexDirection="column" alignItems="space-between">
+          <Button variant="contained" color="info" onClick={selectGastoEditar}>Editar</Button>
+          <Button variant="contained" color="error" onClick={borrarGasto}>Eliminar</Button>
+      </Grid>
     </div>
+
   )
 }
 

@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "backend:local": "json-graphql-server db.cjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
@@ -16,8 +17,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.2",
     "react-redux": "^8.0.7",
-    "react-router-dom": "^6.11.2",
-    "backend:local": "json-graphql-server db.cjs"
+    "react-router-dom": "^6.11.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

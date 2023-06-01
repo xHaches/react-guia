@@ -4,11 +4,6 @@ import Cliente from "../components/Cliente";
 import { startSetClientes } from "../store/clientes/thunk";
 import { RootState } from "../store/store";
 
-export function loader() {
-
-  return "Desde Loader";
-}
-
 export const Index = () => {
 
   const dispatch = useDispatch();

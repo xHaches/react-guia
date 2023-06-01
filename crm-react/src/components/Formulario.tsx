@@ -1,29 +1,46 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ICliente } from "../interfaces/cliente.interface"
+import { startCrearCliente, startUpdateCliente } from "../store/clientes/thunk";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const Formulario = ({cliente}: {cliente: ICliente}) => {
+const Formulario = ({cliente}: {cliente?: ICliente}) => {
 
     const [mensaje, setMensaje] = useState('');
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, formState: { errors }, reset } = useForm({
+        defaultValues: {
+            ...cliente
+        }
+    });
 
-    const onSubmit = (data: any) => {
-        console.log(errors);
+    const onSubmit = async (data: any) => {
+        if(cliente) {
+            dispatch(startUpdateCliente(data));
+            navigate(-1);
+            return;
+        }
+        dispatch(startCrearCliente(data));
+        navigate(-1);
+
+        reset();
     }
 
     useEffect(() => {
-        switch (errors.presupuesto?.type) {
+        switch (errors.nombre?.type) {
             case 'required':
                 return setMensaje('El presupuesto es requrido');
             default:
                 return setMensaje('');
         }
-    }, [errors.presupuesto?.type])
+    }, [errors])
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="mb-4">
                 <label
                     className="text-gray-800"
@@ -95,7 +112,7 @@ const Formulario = ({cliente}: {cliente: ICliente}) => {
                 type="submit"
                 className="mt-5 w-full bg-blue-800 p-3 uppercase font-bold text-white text-lg"
             >
-                Registrar Cliente
+                {cliente ?  'Editar Cliente' : 'Registrar Cliente'}
             </button>
             {mensaje && <h1>{mensaje}</h1>}
         </form>

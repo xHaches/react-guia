@@ -1,8 +1,19 @@
+import { useNavigate } from "react-router-dom";
 import { ICliente } from "../interfaces/cliente.interface"
+import { useDispatch } from "react-redux";
+import { startDeleteCliente } from "../store/clientes/thunk";
 
 const Cliente = ({cliente}: {cliente: ICliente}) => {
 
     const {nombre, empresa, email, telefono, id} = cliente;
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const removeCliente = (id: number) => {
+        
+        dispatch(startDeleteCliente(id))
+    }
 
     return (
         <tr className="border-b">
@@ -20,12 +31,14 @@ const Cliente = ({cliente}: {cliente: ICliente}) => {
                 <button
                     type="button"
                     className="text-blue-600 hover:text-blue-700 uppercase font-bold text-xs"
+                    onClick={() => navigate(`clientes/${id}/editar`)}
                 >
                     Editar
                 </button>
                 <button
                     type="button"
                     className="text-red-600 hover:text-red-700 uppercase font-bold text-xs"
+                    onClick={() => removeCliente(id)}
                 >
                     Eliminar
                 </button>

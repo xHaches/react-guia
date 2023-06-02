@@ -12,7 +12,9 @@
     "backend:local": "json-graphql-server db.cjs"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.15",
     "@reduxjs/toolkit": "^1.9.5",
+    "graphql": "^16.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.2",

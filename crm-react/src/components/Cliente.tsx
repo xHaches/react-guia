@@ -1,7 +1,10 @@
+import { useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { ICliente } from "../interfaces/cliente.interface"
 import { useDispatch } from "react-redux";
-import { startDeleteCliente } from "../store/clientes/thunk";
+import { REMOVE_CLIENTE_MUTATION } from "../gql/queries/cliente";
+import { useMutation } from '@apollo/client';
+import { removeClienteState } from '../store/clientes/clientesSlice';
 
 const Cliente = ({cliente}: {cliente: ICliente}) => {
 
@@ -10,10 +13,18 @@ const Cliente = ({cliente}: {cliente: ICliente}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const [deleteCliente, result] = useMutation(REMOVE_CLIENTE_MUTATION);
+
     const removeCliente = (id: number) => {
-        
-        dispatch(startDeleteCliente(id))
+        deleteCliente({variables: {id}})
     }
+
+    useEffect(() => {
+        if(result.data) {
+            dispatch(removeClienteState(cliente.id));
+        }
+    }, [result.data])
+    
 
     return (
         <tr className="border-b">

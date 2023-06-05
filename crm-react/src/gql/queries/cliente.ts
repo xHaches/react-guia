@@ -1,9 +1,10 @@
-import { ICliente } from "../../interfaces/cliente.interface";
 
-export const getClienteById = (id: number) => (
-    `
-    query {
-        Cliente(id: ${id}) {
+import { gql } from '@apollo/client'
+
+
+export const FIND_CLIENTE_BY_ID_QUERY = gql`
+    query findClienteById($id: ID!) {
+        Cliente(id: $id) {
             id
             nombre
             telefono
@@ -11,11 +12,11 @@ export const getClienteById = (id: number) => (
             empresa
             notas
         }
-    }`
-);
+    }
+`;
 
-export const getAllClientes = () => (
-    `{
+export const GET_ALL_CLIENTES_QUERY = gql`
+    {
         allClientes {
             id
             nombre
@@ -23,60 +24,70 @@ export const getAllClientes = () => (
             email
             empresa
         }
-    }`
-)
+    }
+`;
 
-export const createCliente = (cliente: ICliente) => (
-    `mutation nuevoCliente {
+export const CREATE_CLIENTE_MUTATION = gql`
+    mutation createCliente(
+        $nombre: String!,
+        $telefono:String!,
+        $email:String!,
+        $empresa:String!,
+        $notas:String!
+    ) {
         createCliente(
-        nombre: "${cliente.nombre}",
-        telefono: ${cliente.telefono},
-        email: "${cliente.email}",
-        empresa: "${cliente.empresa}",
-        notas: "${cliente.notas}",
+        nombre: $nombre,
+        telefono:$telefono,
+        email:$email,
+        empresa:$empresa,
+        notas:$notas
         ) {
+        id,
+        nombre,
+        telefono,
+        email,
+        empresa,
+        notas
+        }
+    }
+`;
+
+export const UPDATE_CLIENTE_MUTATION = gql`
+    mutation updateCliente(
+        $id:ID!,
+        $nombre: String!,
+        $telefono:String!,
+        $email:String!,
+        $empresa:String!,
+        $notas:String!
+    ) {
+        updateCliente(
+        id: $id,
+        nombre: $nombre,
+        telefono:$telefono,
+        email:$email,
+        empresa:$empresa,
+        notas:$notas
+        ) {
+        id,
+        nombre,
+        telefono,
+        email,
+        empresa,
+        notas
+        }
+    }
+`;
+
+export const REMOVE_CLIENTE_MUTATION = gql`
+    mutation removeCliente($id:ID!) {
+        removeCliente(id:$id){
         id
         nombre
         telefono
         email
         empresa
         notas
-        }
-    }`
-)
-
-export const updateCliente = (cliente: ICliente) => (
-    `mutation {
-        updateCliente(
-            id: "${cliente.id}"
-            nombre: "${cliente.nombre}",
-            telefono: ${cliente.telefono},
-            email: "${cliente.email}",
-            empresa: "${cliente.empresa}",
-            notas: "${cliente.notas}",
-        ) {
-          id
-          nombre
-          telefono
-          email
-          empresa
-          notas
-        }
-      }`
-)
-
-export const removeCliente = (id: number) => (
-    `mutation {
-		removeCliente(
-    id: ${id},
-    ) {
-            id
-            nombre
-            telefono
-            email
-            empresa
-            notas
-        }
-    }`
-)
-
+    }
+    }
+`;

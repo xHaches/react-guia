@@ -1,16 +1,23 @@
+import { useQuery } from "@apollo/client/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cliente from "../components/Cliente";
-import { startSetClientes } from "../store/clientes/thunk";
+import { GET_ALL_CLIENTES_QUERY } from "../gql/queries/cliente";
+import { setClientes } from "../store/clientes/clientesSlice";
 import { RootState } from "../store/store";
 
 export const Index = () => {
 
   const dispatch = useDispatch();
 
+  const { data, error, loading } = useQuery(GET_ALL_CLIENTES_QUERY);
+
   useEffect(() => {
-    dispatch(startSetClientes());
-  }, []);
+    if(data) {
+      dispatch(setClientes(data.allClientes));
+    }
+  }, [data]);
+
 
   const { clientes } = useSelector((state: RootState) => state.clientes.value)
   

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getClienteById } from "../gql/queries/cliente";
+import { FIND_CLIENTE_BY_ID_QUERY} from "../gql/queries/cliente";
 import ErrorPage from "../components/ErrorPage";
 import Formulario from "../components/Formulario";
+import { useQuery } from '@apollo/client';
 
 const EditarCliente = () => {
 
@@ -11,31 +12,21 @@ const EditarCliente = () => {
 
     const [cliente, setCliente] = useState();
 
-    const getCliente = async (id :number) => {
-        const res = await fetch(import.meta.env.VITE_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                query: getClienteById(id)
-            })
-        });
-        const {data} = await res.json();
-
-        setCliente(data.Cliente);
-    }
+    const { data, error, loading } = useQuery(FIND_CLIENTE_BY_ID_QUERY, {variables: {id}});
 
     useEffect(() => {
-        getCliente(+id!);
-    }, [])
-    
+        if(data) {
+            setCliente(data.Cliente);
+        }
+    }, [data])
 
     return (
         <>
             {
                 !cliente ? <ErrorPage/> : (
         <>
-            <h1 className="font-black text-4xl text-blue-900">Nuevo Cliente</h1>
-            <p className="mt-3">Llena todos los campos para registrar un nuevo cliente</p>
+            <h1 className="font-black text-4xl text-blue-900">Editar Cliente</h1>
+            <p className="mt-3">Llena todos los campos para editar un cliente</p>
 
             <div className="flex justify-end">
                 <button

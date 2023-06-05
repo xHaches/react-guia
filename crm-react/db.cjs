@@ -3,7 +3,7 @@ module.exports = {
         {
             "id": 1,
             "nombre": "Juan",
-            "telefono": 102013313,
+            "telefono": "102013313",
             "email": "juan@juan.com",
             "empresa": "Codigo Con Juan",
             "notas": "123123"
@@ -11,7 +11,7 @@ module.exports = {
         {
             "id": 2,
             "nombre": "Karen",
-            "telefono": 138198313,
+            "telefono": "138198313123213",
             "email": "karen@juan.com",
             "empresa": "Codigo Con Juan",
             "notas": "123123"
@@ -19,7 +19,7 @@ module.exports = {
         {
             "id": 3,
             "nombre": "Josue",
-            "telefono": 31983913,
+            "telefono": "31983913",
             "email": "josue@juan.com",
             "empresa": "Codigo Con Juan",
             "notas": "123123"
@@ -27,7 +27,7 @@ module.exports = {
         {
             "id": 4,
             "nombre": "Miguel",
-            "telefono": 319381983,
+            "telefono": "319381983",
             "email": "miguel@juan.com",
             "empresa": "Codigo Con Juan",
             "notas": "123123"
@@ -35,7 +35,7 @@ module.exports = {
         {
             "id": 5,
             "nombre": "Pedro",
-            "telefono": 1398198938,
+            "telefono": "1398198938",
             "email": "pedro@juan.com",
             "empresa": "Codigo Con Juan",
             "notas": "123123"

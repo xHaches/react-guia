@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ICliente } from "../interfaces/cliente.interface"
-import { startCrearCliente, startUpdateCliente } from "../store/clientes/thunk";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from '@apollo/client';
+import { CREATE_CLIENTE_MUTATION, UPDATE_CLIENTE_MUTATION } from "../gql/queries/cliente";
+import { createClienteState, updateClienteState } from "../store/clientes/clientesSlice";
 
 const Formulario = ({cliente}: {cliente?: ICliente}) => {
 
     const [mensaje, setMensaje] = useState('');
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm({
         defaultValues: {
@@ -18,15 +18,36 @@ const Formulario = ({cliente}: {cliente?: ICliente}) => {
         }
     });
 
-    const onSubmit = async (data: any) => {
-        if(cliente) {
-            dispatch(startUpdateCliente(data));
-            navigate(-1);
+    const [updateCliente, resultUpdate] = useMutation(UPDATE_CLIENTE_MUTATION, {
+        onError: e => console.log(e.graphQLErrors)
+    });
+
+    const [createCliente, resultCreate] = useMutation(CREATE_CLIENTE_MUTATION, {
+        onError: e => console.log(e.graphQLErrors)
+    });
+
+    useEffect(() => {
+        if(!resultUpdate.data) {
             return;
         }
-        dispatch(startCrearCliente(data));
+        updateClienteState(resultUpdate.data)
         navigate(-1);
+    }, [resultUpdate.data])
+    
+    useEffect(() => {
+        if(!resultCreate.data) {
+            return;
+        }
+        createClienteState(resultCreate.data.createCliente)
+        navigate(-1);
+    }, [resultCreate?.data])
 
+    const onSubmit = async (data: any) => {
+        if(cliente) {
+            updateCliente({variables: {...data}})
+            return;
+        }
+        createCliente({variables: {...data}});
         reset();
     }
 
